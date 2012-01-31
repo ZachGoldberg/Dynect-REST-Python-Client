@@ -16,8 +16,12 @@ class DynectDNSClient:
       domainName = self.defaultDomainName
 
     try:
-      response = self._request('ANYRecord/%s/%s/' % (
-          domainName, hostName), None)
+      if hostName:
+        response = self._request('AllRecord/%s/%s/' % (
+            domainName, hostName), None)
+      else:
+        response = self._request('AllRecord/%s/' % (
+            domainName), None)
 
       if 'data' in response:
         records = []
