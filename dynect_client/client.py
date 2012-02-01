@@ -32,6 +32,7 @@ class DynectDNSClient:
           record['value'] = record['data']['rdata'].values()[0]
           record['type'] = record['data']['record_type']
           record['ttl'] = record['data']['ttl']
+          record['url'] = url
 
           records.append(record)
       return records
@@ -68,11 +69,21 @@ class DynectDNSClient:
     if not domainName:
       domainName = self.defaultDomainName
 
-    data = self.getRecords(hostName, type, domainName)
-    if not data:
+    records = self.getRecords(hostName, type, domainName)
+    if not records:
       return False
 
-    url = data[0]
+    url = None
+    for record in records:
+      if record['value'] == data:
+        url = record['url']
+
+    if not url:
+      self.errors.append("Tried to delete a record that didn't "
+                         "exist (%s,%s)" % (
+          data, hostName))
+      return False
+
     url = url.replace("/REST/", "")
     try:
       self._request(url, None, "DELETE")
