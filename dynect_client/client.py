@@ -1,5 +1,6 @@
 import json
 import urllib2
+import threading
 
 
 class DynectDNSClient:
@@ -11,6 +12,7 @@ class DynectDNSClient:
     self.defaultDomainName = defaultDomain
     self.sessionToken = None
     self.errors = []
+    self.lock = threading.Semaphore()
 
   def getRecords(self, hostName, type="A", domainName=None):
     if not domainName:
@@ -124,14 +126,17 @@ class DynectDNSClient:
     if type:
       setattr(req, "method", type)
 
+    self.lock.acquire()
     try:
       resp = urllib2.urlopen(req)
+      self.lock.release()
       if type:
         return resp
       else:
         return json.loads(resp.read())
 
     except urllib2.HTTPError, e:
+      self.lock.release()
       if e.code == 400:
         self._login()
         return self._request(url, post)
