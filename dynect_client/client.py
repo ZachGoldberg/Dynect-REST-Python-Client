@@ -142,6 +142,9 @@ class DynectDNSClient:
         return self._request(url, post)
       else:
         raise e
+    except Exception, err:
+      self.lock.release()
+      raise err
 
 
 class MethodRequest(urllib2.Request):
