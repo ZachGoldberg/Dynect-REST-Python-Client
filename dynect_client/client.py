@@ -10,6 +10,7 @@ class DynectDNSClient:
     self.password = password
     self.defaultDomainName = defaultDomain
     self.sessionToken = None
+    self.errors = []
 
   def getRecords(self, hostName, type="A", domainName=None):
     if not domainName:
@@ -40,6 +41,11 @@ class DynectDNSClient:
       else:
         raise e
 
+  def get_errors(self):
+    errors = [e for e in self.errors]
+    self.errors = []
+    return errors
+
   def addRecord(self, data, hostName, type="A", TTL=3600, domainName=None):
     url, fieldName = self._api_details(type)
 
@@ -52,6 +58,7 @@ class DynectDNSClient:
 
     response = self._request(url, data)
     if response['status'] != 'success':
+      self.errors.append(response)
       return False
 
     response = self._publish(domainName)
