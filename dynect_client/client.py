@@ -73,6 +73,7 @@ class DynectDNSClient:
 
     records = self.getRecords(hostName, type, domainName)
     if not records:
+      self.errors.append("No records exist for %s" % hostName)
       return False
 
     url = None
@@ -91,6 +92,8 @@ class DynectDNSClient:
       self._request(url, None, "DELETE")
       self._publish(domainName)
     except:
+      import traceback
+      self.errors.append(traceback.format_exc())
       return False
 
     return True
