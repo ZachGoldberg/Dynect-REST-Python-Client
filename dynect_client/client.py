@@ -78,8 +78,9 @@ class DynectDNSClient:
 
     url = None
     for record in records:
-      if record['value'] == data:
+      if record['value'] == data and record['record'] == hostName:
         url = record['url']
+        break
 
     if not url:
       self.errors.append("Tried to delete a record that didn't "
