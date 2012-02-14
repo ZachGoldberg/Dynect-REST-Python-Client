@@ -26,6 +26,9 @@ class DynectDNSClient:
         response = self._request('AllRecord/%s/' % (
             domainName), None)
 
+      if not response:
+        return []
+
       if 'data' in response:
         records = []
         for url in response['data']:
