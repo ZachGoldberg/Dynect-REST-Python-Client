@@ -42,7 +42,9 @@ class DynectDNSClient:
       if e.code == 404:
         return None
       else:
-        raise e
+        import traceback
+        self.errors.append(traceback.format_exc())
+        return None
 
   def get_errors(self):
     errors = [e for e in self.errors]
@@ -145,10 +147,13 @@ class DynectDNSClient:
         self._login()
         return self._request(url, post)
       else:
-        raise e
+        self.errors.append(e)
+        return None
     except Exception, err:
       self.lock.release()
-      raise err
+      import traceback
+      self.errors.append(traceback.format_exc())
+      return None
 
 
 class MethodRequest(urllib2.Request):
