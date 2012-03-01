@@ -33,7 +33,7 @@ class DynectDNSClient:
         records = []
         for url in response['data']:
           record = self._request(url.replace('/REST/', ''), None)
-          if record and 'data' in record:
+          if record and isinstance(record.get('data'), dict):
             record['record'] = record['data']['fqdn']
             record['value'] = record['data']['rdata'].values()[0]
             record['type'] = record['data']['record_type']
