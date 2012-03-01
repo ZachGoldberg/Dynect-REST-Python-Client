@@ -33,13 +33,13 @@ class DynectDNSClient:
         records = []
         for url in response['data']:
           record = self._request(url.replace('/REST/', ''), None)
-          record['record'] = record['data']['fqdn']
-          record['value'] = record['data']['rdata'].values()[0]
-          record['type'] = record['data']['record_type']
-          record['ttl'] = record['data']['ttl']
-          record['url'] = url
-
-          records.append(record)
+          if record and 'data' in record:
+            record['record'] = record['data']['fqdn']
+            record['value'] = record['data']['rdata'].values()[0]
+            record['type'] = record['data']['record_type']
+            record['ttl'] = record['data']['ttl']
+            record['url'] = url
+            records.append(record)
       return records
     except urllib2.HTTPError, e:
       if e.code == 404:
