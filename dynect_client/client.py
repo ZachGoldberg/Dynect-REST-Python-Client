@@ -65,7 +65,7 @@ class DynectDNSClient:
             "rdata": {fieldName: data}}
 
     response = self._request(url, data)
-    if response['status'] != 'success':
+    if not response or response['status'] != 'success':
       self.errors.append(response)
       return False
 
