@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='dynect-client',
-      version='0.2.13',
+      version='0.2.14',
       description='Dynect REST API Client for adding/removing domains',
       author='Zach Goldberg',
       author_email='zach@zachgoldberg.com',

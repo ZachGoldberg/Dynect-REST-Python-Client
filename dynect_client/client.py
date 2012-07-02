@@ -118,10 +118,10 @@ class DynectDNSClient:
                                                 'user_name': self.userName,
                                                 'password': self.password})
     if not response:
-      return
+      raise AttributeError("Invalid login token")
 
     if response['status'] != 'success':
-      return
+      raise AttributeError("Invalid login token")
 
     self.sessionToken = response['data']['token']
 
