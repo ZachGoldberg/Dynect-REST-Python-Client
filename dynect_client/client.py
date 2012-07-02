@@ -117,8 +117,12 @@ class DynectDNSClient:
     response = self._request("Session/", {'customer_name': self.customerName,
                                                 'user_name': self.userName,
                                                 'password': self.password})
+    if not response:
+      return
+
     if response['status'] != 'success':
       return
+
     self.sessionToken = response['data']['token']
 
   def _request(self, url, post, type=None):
