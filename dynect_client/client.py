@@ -107,6 +107,8 @@ class DynectDNSClient:
   def _api_details(self, type):
     if type == "A":
       return ("ARecord", "address")
+    elif type == "PTR":
+      return ("PTRRecord", "ptrdname")
     else:
       return ("CNameRecord", "cname")
 
